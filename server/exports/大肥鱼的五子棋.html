@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大肥鱼的五子棋</title>
+<style>
+  :root { --bg:#14110f; --ink:#efe6da; --muted:#9b8d7e; --accent:#e8b06a; --line:#332b25; --wood:#c9a878; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:32px 16px 56px; background:radial-gradient(900px 480px at 50% -10%, #221a13 0%, var(--bg) 62%); color:var(--ink); font:15px/1.6 "PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  header { max-width:760px; margin:0 auto 12px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  h1 { margin:0; font-size:24px; letter-spacing:2px; font-weight:600; }
+  .status { color:var(--muted); font-size:13px; }
+  .status b { color:var(--accent); font-weight:500; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .board { display:grid; grid-template-columns:repeat(15, 1fr); background:var(--wood); border-radius:10px; padding:8px; gap:0; box-shadow:0 14px 40px rgba(0,0,0,.4); }
+  .board.lobby { opacity:.55; }
+  .cell { position:relative; aspect-ratio:1/1; border:1px solid rgba(60,40,20,.35); background:transparent; cursor:pointer; padding:0; }
+  .cell::after { content:''; position:absolute; inset:18%; border-radius:50%; background:transparent; }
+  .cell.black::after { background:radial-gradient(circle at 35% 30%, #6b6b6b, #111 70%); }
+  .cell.white::after { background:radial-gradient(circle at 35% 30%, #fff, #c9c9c9 70%); }
+  .cell.last::before { content:''; position:absolute; inset:38%; border-radius:50%; background:var(--accent); z-index:2; }
+  .cell:hover::after { background:rgba(0,0,0,.18); }
+  .cell.black:hover::after, .cell.white:hover::after { background:inherit; }
+  .toolbar { max-width:760px; margin:14px auto 0; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  button.act { background:var(--accent); color:#1a140e; border:0; border-radius:10px; padding:9px 16px; font:inherit; font-weight:500; cursor:pointer; }
+  button.act:disabled { opacity:.45; cursor:default; }
+  button.start { background:#8fd18a; color:#12210f; }
+  button.ghost { background:#2a231d; color:#d9c9b4; border:1px solid #3a3129; border-radius:10px; padding:9px 14px; font:inherit; cursor:pointer; }
+  button[hidden] { display:none; }
+  .panel { background:#1d1916; border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--muted); font-size:13px; }
+  .panel b { color:var(--ink); font-weight:500; }
+  .hint { min-height:18px; color:#c9a877; font-size:12.5px; margin-top:6px; }
+  .hint.err { color:#e08a7a; }
+</style></head>
+<body>
+<header>
+  <h1>大肥鱼的五子棋</h1>
+  <div class="status" id="status">等双方准备</div>
+</header>
+<div class="wrap">
+  <div class="board lobby" id="board"><button class="cell" data-x="0" data-y="0" aria-label="A1"></button><button class="cell" data-x="1" data-y="0" aria-label="B1"></button><button class="cell" data-x="2" data-y="0" aria-label="C1"></button><button class="cell" data-x="3" data-y="0" aria-label="D1"></button><button class="cell" data-x="4" data-y="0" aria-label="E1"></button><button class="cell" data-x="5" data-y="0" aria-label="F1"></button><button class="cell" data-x="6" data-y="0" aria-label="G1"></button><button class="cell" data-x="7" data-y="0" aria-label="H1"></button><button class="cell" data-x="8" data-y="0" aria-label="I1"></button><button class="cell" data-x="9" data-y="0" aria-label="J1"></button><button class="cell" data-x="10" data-y="0" aria-label="K1"></button><button class="cell" data-x="11" data-y="0" aria-label="L1"></button><button class="cell" data-x="12" data-y="0" aria-label="M1"></button><button class="cell" data-x="13" data-y="0" aria-label="N1"></button><button class="cell" data-x="14" data-y="0" aria-label="O1"></button><button class="cell" data-x="0" data-y="1" aria-label="A2"></button><button class="cell" data-x="1" data-y="1" aria-label="B2"></button><button class="cell" data-x="2" data-y="1" aria-label="C2"></button><button class="cell" data-x="3" data-y="1" aria-label="D2"></button><button class="cell" data-x="4" data-y="1" aria-label="E2"></button><button class="cell" data-x="5" data-y="1" aria-label="F2"></button><button class="cell" data-x="6" data-y="1" aria-label="G2"></button><button class="cell" data-x="7" data-y="1" aria-label="H2"></button><button class="cell" data-x="8" data-y="1" aria-label="I2"></button><button class="cell" data-x="9" data-y="1" aria-label="J2"></button><button class="cell" data-x="10" data-y="1" aria-label="K2"></button><button class="cell" data-x="11" data-y="1" aria-label="L2"></button><button class="cell" data-x="12" data-y="1" aria-label="M2"></button><button class="cell" data-x="13" data-y="1" aria-label="N2"></button><button class="cell" data-x="14" data-y="1" aria-label="O2"></button><button class="cell" data-x="0" data-y="2" aria-label="A3"></button><button class="cell" data-x="1" data-y="2" aria-label="B3"></button><button class="cell" data-x="2" data-y="2" aria-label="C3"></button><button class="cell" data-x="3" data-y="2" aria-label="D3"></button><button class="cell" data-x="4" data-y="2" aria-label="E3"></button><button class="cell" data-x="5" data-y="2" aria-label="F3"></button><button class="cell" data-x="6" data-y="2" aria-label="G3"></button><button class="cell" data-x="7" data-y="2" aria-label="H3"></button><button class="cell" data-x="8" data-y="2" aria-label="I3"></button><button class="cell" data-x="9" data-y="2" aria-label="J3"></button><button class="cell" data-x="10" data-y="2" aria-label="K3"></button><button class="cell" data-x="11" data-y="2" aria-label="L3"></button><button class="cell" data-x="12" data-y="2" aria-label="M3"></button><button class="cell" data-x="13" data-y="2" aria-label="N3"></button><button class="cell" data-x="14" data-y="2" aria-label="O3"></button><button class="cell" data-x="0" data-y="3" aria-label="A4"></button><button class="cell" data-x="1" data-y="3" aria-label="B4"></button><button class="cell" data-x="2" data-y="3" aria-label="C4"></button><button class="cell" data-x="3" data-y="3" aria-label="D4"></button><button class="cell" data-x="4" data-y="3" aria-label="E4"></button><button class="cell" data-x="5" data-y="3" aria-label="F4"></button><button class="cell" data-x="6" data-y="3" aria-label="G4"></button><button class="cell" data-x="7" data-y="3" aria-label="H4"></button><button class="cell" data-x="8" data-y="3" aria-label="I4"></button><button class="cell" data-x="9" data-y="3" aria-label="J4"></button><button class="cell" data-x="10" data-y="3" aria-label="K4"></button><button class="cell" data-x="11" data-y="3" aria-label="L4"></button><button class="cell" data-x="12" data-y="3" aria-label="M4"></button><button class="cell" data-x="13" data-y="3" aria-label="N4"></button><button class="cell" data-x="14" data-y="3" aria-label="O4"></button><button class="cell" data-x="0" data-y="4" aria-label="A5"></button><button class="cell" data-x="1" data-y="4" aria-label="B5"></button><button class="cell" data-x="2" data-y="4" aria-label="C5"></button><button class="cell" data-x="3" data-y="4" aria-label="D5"></button><button class="cell" data-x="4" data-y="4" aria-label="E5"></button><button class="cell" data-x="5" data-y="4" aria-label="F5"></button><button class="cell" data-x="6" data-y="4" aria-label="G5"></button><button class="cell" data-x="7" data-y="4" aria-label="H5"></button><button class="cell" data-x="8" data-y="4" aria-label="I5"></button><button class="cell" data-x="9" data-y="4" aria-label="J5"></button><button class="cell" data-x="10" data-y="4" aria-label="K5"></button><button class="cell" data-x="11" data-y="4" aria-label="L5"></button><button class="cell" data-x="12" data-y="4" aria-label="M5"></button><button class="cell" data-x="13" data-y="4" aria-label="N5"></button><button class="cell" data-x="14" data-y="4" aria-label="O5"></button><button class="cell" data-x="0" data-y="5" aria-label="A6"></button><button class="cell" data-x="1" data-y="5" aria-label="B6"></button><button class="cell" data-x="2" data-y="5" aria-label="C6"></button><button class="cell" data-x="3" data-y="5" aria-label="D6"></button><button class="cell" data-x="4" data-y="5" aria-label="E6"></button><button class="cell" data-x="5" data-y="5" aria-label="F6"></button><button class="cell" data-x="6" data-y="5" aria-label="G6"></button><button class="cell" data-x="7" data-y="5" aria-label="H6"></button><button class="cell" data-x="8" data-y="5" aria-label="I6"></button><button class="cell" data-x="9" data-y="5" aria-label="J6"></button><button class="cell" data-x="10" data-y="5" aria-label="K6"></button><button class="cell" data-x="11" data-y="5" aria-label="L6"></button><button class="cell" data-x="12" data-y="5" aria-label="M6"></button><button class="cell" data-x="13" data-y="5" aria-label="N6"></button><button class="cell" data-x="14" data-y="5" aria-label="O6"></button><button class="cell" data-x="0" data-y="6" aria-label="A7"></button><button class="cell" data-x="1" data-y="6" aria-label="B7"></button><button class="cell" data-x="2" data-y="6" aria-label="C7"></button><button class="cell" data-x="3" data-y="6" aria-label="D7"></button><button class="cell" data-x="4" data-y="6" aria-label="E7"></button><button class="cell" data-x="5" data-y="6" aria-label="F7"></button><button class="cell" data-x="6" data-y="6" aria-label="G7"></button><button class="cell" data-x="7" data-y="6" aria-label="H7"></button><button class="cell" data-x="8" data-y="6" aria-label="I7"></button><button class="cell" data-x="9" data-y="6" aria-label="J7"></button><button class="cell" data-x="10" data-y="6" aria-label="K7"></button><button class="cell" data-x="11" data-y="6" aria-label="L7"></button><button class="cell" data-x="12" data-y="6" aria-label="M7"></button><button class="cell" data-x="13" data-y="6" aria-label="N7"></button><button class="cell" data-x="14" data-y="6" aria-label="O7"></button><button class="cell" data-x="0" data-y="7" aria-label="A8"></button><button class="cell" data-x="1" data-y="7" aria-label="B8"></button><button class="cell" data-x="2" data-y="7" aria-label="C8"></button><button class="cell" data-x="3" data-y="7" aria-label="D8"></button><button class="cell" data-x="4" data-y="7" aria-label="E8"></button><button class="cell" data-x="5" data-y="7" aria-label="F8"></button><button class="cell" data-x="6" data-y="7" aria-label="G8"></button><button class="cell" data-x="7" data-y="7" aria-label="H8"></button><button class="cell" data-x="8" data-y="7" aria-label="I8"></button><button class="cell" data-x="9" data-y="7" aria-label="J8"></button><button class="cell" data-x="10" data-y="7" aria-label="K8"></button><button class="cell" data-x="11" data-y="7" aria-label="L8"></button><button class="cell" data-x="12" data-y="7" aria-label="M8"></button><button class="cell" data-x="13" data-y="7" aria-label="N8"></button><button class="cell" data-x="14" data-y="7" aria-label="O8"></button><button class="cell" data-x="0" data-y="8" aria-label="A9"></button><button class="cell" data-x="1" data-y="8" aria-label="B9"></button><button class="cell" data-x="2" data-y="8" aria-label="C9"></button><button class="cell" data-x="3" data-y="8" aria-label="D9"></button><button class="cell" data-x="4" data-y="8" aria-label="E9"></button><button class="cell" data-x="5" data-y="8" aria-label="F9"></button><button class="cell" data-x="6" data-y="8" aria-label="G9"></button><button class="cell" data-x="7" data-y="8" aria-label="H9"></button><button class="cell" data-x="8" data-y="8" aria-label="I9"></button><button class="cell" data-x="9" data-y="8" aria-label="J9"></button><button class="cell" data-x="10" data-y="8" aria-label="K9"></button><button class="cell" data-x="11" data-y="8" aria-label="L9"></button><button class="cell" data-x="12" data-y="8" aria-label="M9"></button><button class="cell" data-x="13" data-y="8" aria-label="N9"></button><button class="cell" data-x="14" data-y="8" aria-label="O9"></button><button class="cell" data-x="0" data-y="9" aria-label="A10"></button><button class="cell" data-x="1" data-y="9" aria-label="B10"></button><button class="cell" data-x="2" data-y="9" aria-label="C10"></button><button class="cell" data-x="3" data-y="9" aria-label="D10"></button><button class="cell" data-x="4" data-y="9" aria-label="E10"></button><button class="cell" data-x="5" data-y="9" aria-label="F10"></button><button class="cell" data-x="6" data-y="9" aria-label="G10"></button><button class="cell" data-x="7" data-y="9" aria-label="H10"></button><button class="cell" data-x="8" data-y="9" aria-label="I10"></button><button class="cell" data-x="9" data-y="9" aria-label="J10"></button><button class="cell" data-x="10" data-y="9" aria-label="K10"></button><button class="cell" data-x="11" data-y="9" aria-label="L10"></button><button class="cell" data-x="12" data-y="9" aria-label="M10"></button><button class="cell" data-x="13" data-y="9" aria-label="N10"></button><button class="cell" data-x="14" data-y="9" aria-label="O10"></button><button class="cell" data-x="0" data-y="10" aria-label="A11"></button><button class="cell" data-x="1" data-y="10" aria-label="B11"></button><button class="cell" data-x="2" data-y="10" aria-label="C11"></button><button class="cell" data-x="3" data-y="10" aria-label="D11"></button><button class="cell" data-x="4" data-y="10" aria-label="E11"></button><button class="cell" data-x="5" data-y="10" aria-label="F11"></button><button class="cell" data-x="6" data-y="10" aria-label="G11"></button><button class="cell" data-x="7" data-y="10" aria-label="H11"></button><button class="cell" data-x="8" data-y="10" aria-label="I11"></button><button class="cell" data-x="9" data-y="10" aria-label="J11"></button><button class="cell" data-x="10" data-y="10" aria-label="K11"></button><button class="cell" data-x="11" data-y="10" aria-label="L11"></button><button class="cell" data-x="12" data-y="10" aria-label="M11"></button><button class="cell" data-x="13" data-y="10" aria-label="N11"></button><button class="cell" data-x="14" data-y="10" aria-label="O11"></button><button class="cell" data-x="0" data-y="11" aria-label="A12"></button><button class="cell" data-x="1" data-y="11" aria-label="B12"></button><button class="cell" data-x="2" data-y="11" aria-label="C12"></button><button class="cell" data-x="3" data-y="11" aria-label="D12"></button><button class="cell" data-x="4" data-y="11" aria-label="E12"></button><button class="cell" data-x="5" data-y="11" aria-label="F12"></button><button class="cell" data-x="6" data-y="11" aria-label="G12"></button><button class="cell" data-x="7" data-y="11" aria-label="H12"></button><button class="cell" data-x="8" data-y="11" aria-label="I12"></button><button class="cell" data-x="9" data-y="11" aria-label="J12"></button><button class="cell" data-x="10" data-y="11" aria-label="K12"></button><button class="cell" data-x="11" data-y="11" aria-label="L12"></button><button class="cell" data-x="12" data-y="11" aria-label="M12"></button><button class="cell" data-x="13" data-y="11" aria-label="N12"></button><button class="cell" data-x="14" data-y="11" aria-label="O12"></button><button class="cell" data-x="0" data-y="12" aria-label="A13"></button><button class="cell" data-x="1" data-y="12" aria-label="B13"></button><button class="cell" data-x="2" data-y="12" aria-label="C13"></button><button class="cell" data-x="3" data-y="12" aria-label="D13"></button><button class="cell" data-x="4" data-y="12" aria-label="E13"></button><button class="cell" data-x="5" data-y="12" aria-label="F13"></button><button class="cell" data-x="6" data-y="12" aria-label="G13"></button><button class="cell" data-x="7" data-y="12" aria-label="H13"></button><button class="cell" data-x="8" data-y="12" aria-label="I13"></button><button class="cell" data-x="9" data-y="12" aria-label="J13"></button><button class="cell" data-x="10" data-y="12" aria-label="K13"></button><button class="cell" data-x="11" data-y="12" aria-label="L13"></button><button class="cell" data-x="12" data-y="12" aria-label="M13"></button><button class="cell" data-x="13" data-y="12" aria-label="N13"></button><button class="cell" data-x="14" data-y="12" aria-label="O13"></button><button class="cell" data-x="0" data-y="13" aria-label="A14"></button><button class="cell" data-x="1" data-y="13" aria-label="B14"></button><button class="cell" data-x="2" data-y="13" aria-label="C14"></button><button class="cell" data-x="3" data-y="13" aria-label="D14"></button><button class="cell" data-x="4" data-y="13" aria-label="E14"></button><button class="cell" data-x="5" data-y="13" aria-label="F14"></button><button class="cell" data-x="6" data-y="13" aria-label="G14"></button><button class="cell" data-x="7" data-y="13" aria-label="H14"></button><button class="cell" data-x="8" data-y="13" aria-label="I14"></button><button class="cell" data-x="9" data-y="13" aria-label="J14"></button><button class="cell" data-x="10" data-y="13" aria-label="K14"></button><button class="cell" data-x="11" data-y="13" aria-label="L14"></button><button class="cell" data-x="12" data-y="13" aria-label="M14"></button><button class="cell" data-x="13" data-y="13" aria-label="N14"></button><button class="cell" data-x="14" data-y="13" aria-label="O14"></button><button class="cell" data-x="0" data-y="14" aria-label="A15"></button><button class="cell" data-x="1" data-y="14" aria-label="B15"></button><button class="cell" data-x="2" data-y="14" aria-label="C15"></button><button class="cell" data-x="3" data-y="14" aria-label="D15"></button><button class="cell" data-x="4" data-y="14" aria-label="E15"></button><button class="cell" data-x="5" data-y="14" aria-label="F15"></button><button class="cell" data-x="6" data-y="14" aria-label="G15"></button><button class="cell" data-x="7" data-y="14" aria-label="H15"></button><button class="cell" data-x="8" data-y="14" aria-label="I15"></button><button class="cell" data-x="9" data-y="14" aria-label="J15"></button><button class="cell" data-x="10" data-y="14" aria-label="K15"></button><button class="cell" data-x="11" data-y="14" aria-label="L15"></button><button class="cell" data-x="12" data-y="14" aria-label="M15"></button><button class="cell" data-x="13" data-y="14" aria-label="N15"></button><button class="cell" data-x="14" data-y="14" aria-label="O15"></button></div>
+  <div class="toolbar">
+    <button class="act" id="ready" >准备</button>
+    <button class="act start" id="start" hidden>开始</button>
+    <button class="act" id="skill" disabled>天下劫</button>
+    <button class="ghost" id="newgame">新开一局</button>
+    <div class="panel">你执 <b id="sideColor">白</b> · 天下劫：<span id="skillState">冷却中（还差 3 手）</span></div>
+  </div>
+  <div class="hint" id="hint"></div>
+  <div class="hint" style="color:#6f6357">大肥鱼在对话里准备/落子；每次动作后这一页会重画。</div>
+</div>
+<script>
+(() => {
+  const KEY = 'qq-console-token';
+  const q = new URLSearchParams(location.search);
+  if (q.get('token')) localStorage.setItem(KEY, q.get('token'));
+  const token = q.get('token') || localStorage.getItem(KEY) || '';
+  if (q.get('token')) history.replaceState(null, '', location.pathname);
+  const $ = (id) => document.getElementById(id);
+  const hint = (t, err) => { $('hint').textContent = t || ''; $('hint').className = 'hint' + (err ? ' err' : ''); };
+  const api = async (path, opts = {}) => {
+    const res = await fetch(path, { ...opts, headers: { 'content-type': 'application/json', 'x-console-token': token, ...(opts.headers || {}) } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false) throw new Error(data.error || ('HTTP ' + res.status));
+    return data;
+  };
+  const paint = (v) => {
+    const board = $('board');
+    const last = v.moves && v.moves.length ? v.moves[v.moves.length - 1] : null;
+    board.className = 'board' + (v.phase === 'lobby' ? ' lobby' : '');
+    [...board.children].forEach((el, i) => {
+      const x = i % 15, y = Math.floor(i / 15);
+      const val = v.board[y * 15 + x];
+      el.className = 'cell' + (val === 1 ? ' black' : val === 2 ? ' white' : '') + (last && last.x === x && last.y === y ? ' last' : '');
+      el.innerHTML = last && last.x === x && last.y === y ? '<i></i>' : '';
+    });
+    $('status').textContent = v.statusText;
+    $('sideColor').textContent = v.ownerSide;
+    $('skillState').textContent = v.skillMine;
+    const ready = $('ready');
+    ready.hidden = v.phase !== 'lobby' || v.ownerReady;
+    ready.disabled = false;
+    $('start').hidden = !v.canStart;
+    $('start').disabled = !v.canStart;
+    $('skill').hidden = v.phase !== 'playing';
+    $('skill').disabled = !v.canSkill;
+  };
+  const load = async () => { const r = await api('/api/gomoku'); paint(r.view); };
+  document.addEventListener('click', async (e) => {
+    const cell = e.target.closest('.cell');
+    if (!cell) return;
+    if ($('board').classList.contains('lobby')) { hint('还没开始：先准备，等双方都准备好再点「开始」', true); return; }
+    try {
+      const x = Number(cell.dataset.x), y = Number(cell.dataset.y);
+      const r = await api('/api/gomoku/place', { method: 'POST', body: JSON.stringify({ x, y }) });
+      paint(r.view);
+      hint(r.message || '');
+    } catch (err) { hint(err.message, true); }
+  });
+  $('ready').onclick = async () => {
+    try { const r = await api('/api/gomoku/ready', { method: 'POST', body: '{}' }); paint(r.view); hint(r.message || ''); }
+    catch (err) { hint(err.message, true); }
+  };
+  $('start').onclick = async () => {
+    try { const r = await api('/api/gomoku/start', { method: 'POST', body: '{}' }); paint(r.view); hint(r.message || ''); }
+    catch (err) { hint(err.message, true); }
+  };
+  $('skill').onclick = async () => {
+    try { const r = await api('/api/gomoku/skill', { method: 'POST', body: '{}' }); paint(r.view); hint(r.message || ''); }
+    catch (err) { hint(err.message, true); }
+  };
+  $('newgame').onclick = async () => {
+    try { const r = await api('/api/gomoku/new', { method: 'POST', body: '{}' }); paint(r.view); hint('新开一局（重新随机分边）'); }
+    catch (err) { hint(err.message, true); }
+  };
+  load().catch((e) => hint(e.message, true));
+  setInterval(() => { load().catch(() => {}); }, 2000);
+})();
+</script>
+<div style="margin-top:14px;color:#6f6357;font-size:11px;letter-spacing:1px">WhaleHouse-V1.0.9</div>
+</body></html>

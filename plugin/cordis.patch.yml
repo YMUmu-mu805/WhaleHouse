@@ -1,0 +1,7 @@
+- insert:
+    - id: house
+      name: WhaleHouse
+      config:
+        # 数据目录：留空就行 —— 插件会自动找它旁边的 server/（同目录结构）；
+        # 如果你的服务器放在别处，再在这里填绝对路径。
+        dir: ''

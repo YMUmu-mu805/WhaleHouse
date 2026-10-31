@@ -1,0 +1,29 @@
+{
+  "w": 20,
+  "h": 14,
+  "snake": [
+    {
+      "x": 10,
+      "y": 7
+    },
+    {
+      "x": 9,
+      "y": 7
+    },
+    {
+      "x": 8,
+      "y": 7
+    }
+  ],
+  "dir": "r",
+  "food": {
+    "x": 13,
+    "y": 7
+  },
+  "score": 0,
+  "steps": 0,
+  "status": "playing",
+  "startedAt": 1793462111530,
+  "updatedAt": 1793462111530,
+  "resultRecorded": false
+}

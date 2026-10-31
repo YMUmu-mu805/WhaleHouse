@@ -1,0 +1,42 @@
+{
+  "name": "dsh-house-kit",
+  "version": "1.0.9",
+  "description": "给助手一间小房子：九间屋、家具可摆、电视/电脑/冰箱/鱼缸状态栏，外加国际象棋、贪吃蛇、五子棋。标准 MCP 服务，DSH 与其它 MCP 客户端都能用。",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "mcp",
+    "mcp-server",
+    "house",
+    "companion",
+    "chess",
+    "gomoku",
+    "snake"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "src/mcp-server.mjs",
+  "exports": {
+    ".": "./src/mcp-server.mjs"
+  },
+  "files": [
+    "src",
+    "docs",
+    "config.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/mcp-server.mjs",
+    "test": "node src/mcp-server.mjs --selftest",
+    "ui": "node src/ui.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  }
+}

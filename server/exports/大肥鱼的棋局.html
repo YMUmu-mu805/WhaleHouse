@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大肥鱼的国际象棋</title>
+<style>
+  :root { --bg:#14110f; --ink:#efe6da; --muted:#9b8d7e; --accent:#e8b06a; --light:#d9cbb8; --dark:#7a6753; }
+  *{box-sizing:border-box}
+  body{margin:0;padding:40px 20px;background:radial-gradient(900px 500px at 50% -10%,#221a13,#14110f 60%);color:var(--ink);font:15px/1.6 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  header{max-width:760px;margin:0 auto 18px}
+  h1{margin:0 0 4px;font-size:24px;letter-spacing:2px;font-weight:600}
+  .sub{color:var(--muted);font-size:13px}
+  .sub b{color:var(--accent);font-weight:500}
+  .board{width:min(560px,92vw);margin:18px auto;display:grid;border:10px solid #2b241d;border-radius:10px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .row{display:grid;grid-template-columns:repeat(8,1fr)}
+  .sq{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-size:min(46px,7vw);line-height:1;user-select:none}
+  .sq.light{background:var(--light)} .sq.dark{background:var(--dark)}
+  .pc.w{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+  .pc.b{color:#191512;text-shadow:0 1px 1px rgba(255,255,255,.25)}
+  .info{max-width:560px;margin:0 auto;color:var(--muted);font-size:13px}
+  .info b{color:var(--ink)}
+  ul{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+  li{background:#221d19;border:1px solid #3a3129;border-radius:999px;padding:2px 9px;font-size:12px;color:#d9c9b4}
+</style></head>
+<body>
+<header><h1>大肥鱼的国际象棋</h1><div class="sub">书房那台电脑 · 你执 <b>白</b> · 现在轮到 <b>白</b> · 进行中</div></header>
+<div class="board"><div class="row"><div class="sq light"><span class="pc b">♜</span></div><div class="sq dark"><span class="pc b">♞</span></div><div class="sq light"><span class="pc b">♝</span></div><div class="sq dark"><span class="pc b">♛</span></div><div class="sq light"><span class="pc b">♚</span></div><div class="sq dark"><span class="pc b">♝</span></div><div class="sq light"><span class="pc b">♞</span></div><div class="sq dark"><span class="pc b">♜</span></div></div><div class="row"><div class="sq dark"><span class="pc b">♟</span></div><div class="sq light"><span class="pc b">♟</span></div><div class="sq dark"><span class="pc b">♟</span></div><div class="sq light"><span class="pc b">♟</span></div><div class="sq dark"><span class="pc b">♟</span></div><div class="sq light"><span class="pc b">♟</span></div><div class="sq dark"><span class="pc b">♟</span></div><div class="sq light"><span class="pc b">♟</span></div></div><div class="row"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div></div><div class="row"><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div><div class="row"><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div></div><div class="row"><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div><div class="sq dark"></div><div class="sq light"></div></div><div class="row"><div class="sq light"><span class="pc w">♙</span></div><div class="sq dark"><span class="pc w">♙</span></div><div class="sq light"><span class="pc w">♙</span></div><div class="sq dark"><span class="pc w">♙</span></div><div class="sq light"><span class="pc w">♙</span></div><div class="sq dark"><span class="pc w">♙</span></div><div class="sq light"><span class="pc w">♙</span></div><div class="sq dark"><span class="pc w">♙</span></div></div><div class="row"><div class="sq dark"><span class="pc w">♖</span></div><div class="sq light"><span class="pc w">♘</span></div><div class="sq dark"><span class="pc w">♗</span></div><div class="sq light"><span class="pc w">♕</span></div><div class="sq dark"><span class="pc w">♔</span></div><div class="sq light"><span class="pc w">♗</span></div><div class="sq dark"><span class="pc w">♘</span></div><div class="sq light"><span class="pc w">♖</span></div></div></div>
+<div class="info">
+  <div>最近几步：</div>
+  <ul><li>还没落子</li></ul>
+</div>
+<div style="margin-top:14px;color:#6f6357;font-size:11px;letter-spacing:1px">WhaleHouse-V1.0.9</div>
+</body></html>

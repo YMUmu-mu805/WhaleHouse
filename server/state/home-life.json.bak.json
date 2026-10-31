@@ -1,0 +1,82 @@
+{
+  "version": 5,
+  "tv": {
+    "living": {
+      "on": false,
+      "now": null,
+      "last": null
+    },
+    "bedroom": {
+      "on": false,
+      "now": null,
+      "last": null
+    }
+  },
+  "pc": {
+    "on": false,
+    "lastGame": null,
+    "lastGameAt": 0
+  },
+  "leisure": null,
+  "meal": {
+    "config": {},
+    "active": null,
+    "lastMealAt": 0,
+    "decided": {},
+    "decidedDay": "",
+    "supperDecided": null
+  },
+  "mealLastEvent": null,
+  "bath": {
+    "on": false,
+    "startedAt": 0,
+    "temp": 38,
+    "last": null
+  },
+  "diary": {
+    "entries": [
+      {
+        "at": 1793462111516,
+        "text": "今天在阳台晒了一下午太阳。"
+      }
+    ],
+    "lastAt": 1793462111516
+  },
+  "fridge": {
+    "items": [
+      {
+        "name": "两盒牛奶",
+        "by": "大肥鱼",
+        "at": 1793462111510
+      }
+    ]
+  },
+  "tank": {
+    "fish": [
+      {
+        "name": "小红",
+        "by": "大肥鱼",
+        "at": 1793462111512
+      }
+    ]
+  },
+  "chess": {
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "last": null,
+    "lastAt": 0
+  },
+  "gomoku": {
+    "games": 0,
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "last": null,
+    "lastAt": 0
+  },
+  "snake": {
+    "best": []
+  }
+}
